@@ -1,0 +1,17 @@
+---
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: EventListener
+metadata:
+  name: github-docs-el
+spec:
+  serviceAccountName: pipeline
+  triggers:
+    - name: github-listener
+      interceptors:
+        - github: # Secret validation is not working https://github.com/tektoncd/triggers/issues/961
+            secretRef:
+              secretName: github-push-event
+              secretKey: secretToken
+            eventTypes:
+            - push
+      triggerRef: github-docs-t

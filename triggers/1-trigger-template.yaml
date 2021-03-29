@@ -1,0 +1,35 @@
+---
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerTemplate
+metadata:
+  name: github-docs-tt
+spec:
+  params:
+    - name: gitrevision
+      description: The git revision
+    - name: gitrepositoryurl
+      description: The git repository url
+  resourcetemplates:
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        annotations:
+        labels:
+          tekton.dev/pipeline: create-d500-docs
+        generateName: create-d500-docs-triggered-run-
+      spec:
+        params:
+        - name: IMAGE
+          value: image-registry.openshift-image-registry.svc:5000/jtudela-pipelines/do500-docs:latest
+        - name: git-revision
+          value: $(tt.params.gitrevision)
+        - name: git-url
+          value: $(tt.params.gitrepositoryurl)
+        pipelineRef:
+          name: create-d500-docs
+        serviceAccountName: pipeline
+        timeout: 1h0m0s
+        workspaces:
+        - name: shared-workspace
+          persistentVolumeClaim:
+            claimName: tekton-test-pvc

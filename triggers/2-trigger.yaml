@@ -1,0 +1,9 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: Trigger
+metadata:
+  name: github-docs-t
+spec:
+  bindings:
+  - ref: github-docs-tb
+  template:
+    ref: github-docs-tt

@@ -1,0 +1,23 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  annotations:
+  labels:
+    tekton.dev/pipeline: create-d500-docs
+  name: create-d500-docs-run
+spec:
+  params:
+  - name: IMAGE
+    value: image-registry.openshift-image-registry.svc:5000/jtudela-pipelines/do500-docs:latest
+  - name: git-revision
+    value: master
+  - name: git-url
+    value: https://github.com/jtudelag/enablement-docs.git
+  pipelineRef:
+    name: create-d500-docs
+  serviceAccountName: pipeline
+  timeout: 1h0m0s
+  workspaces:
+  - name: shared-workspace
+    persistentVolumeClaim:
+      claimName: tekton-test-pvc
