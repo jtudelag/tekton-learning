@@ -33,11 +33,23 @@ spec:
           value: image-registry.openshift-image-registry.svc.cluster.local:5000
         - name: image-repository
           value: jtudela-pipelines
+        - name: deployment-git-url
+          value: https://github.com/jtudelag/do500-docs-app-kustomize.git
+        - name: deployment-git-revision
+          value: master
         pipelineRef:
           name: create-d500-docs
+        podTemplate:
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            fsGroup: 1001
         serviceAccountName: pipeline
         timeout: 1h0m0s
         workspaces:
         - name: shared-workspace
           persistentVolumeClaim:
             claimName: tekton-test-pvc
+        - name: deployment-manifests
+          persistentVolumeClaim:
+            claimName: tekton-deployment-repo-pvc

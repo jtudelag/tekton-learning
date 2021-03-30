@@ -1,0 +1,45 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: update-tag-kustomize
+spec:
+  description: >-
+    This task will update the image tag using kustomize, commit the changes and push them to to the repo of the workspace.
+    Assuming it is a kustomize ready repo.
+  workspaces:
+    - name: deployment-repo
+      description: The source workspace where the deployment repo has been checkout
+  params:
+    - name: image
+      description: image to be updated
+      type: string
+    - name: new-tag
+      description: tag of the image to be set
+      type: string
+  steps:
+
+    - name: push-manifest-to-git
+      image: quay.io/jtudelag/git-kustomize:1ba2053
+      script: |
+        #!/bin/sh
+        set -eu -o pipefail
+
+        DEPLOYMENT_DIR="$(workspaces.deployment-repo.path)"
+        cd "$DEPLOYMENT_DIR"
+
+        git config --global user.email "bot@tekton-pipelines.dev"
+        git config --global user.name "tekton-pipelines-bot"
+
+        id
+
+        ls -lrt .
+        ls -lrt kustomization.yaml
+
+        cat kustomization.yaml
+
+        kustomize edit set image "$(params.image):$(params.new-tag)"
+
+        git add --a -v
+        git commit -m "New image tag $(params.image):$(params.new-tag)"
+        # FIXME master harcoded
+        git push origin HEAD:master

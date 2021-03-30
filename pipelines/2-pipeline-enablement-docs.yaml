@@ -1,0 +1,98 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: create-d500-docs
+spec:
+  workspaces:
+  - name: shared-workspace
+  - name: deployment-manifests
+  params:
+  - name: application
+    type: string
+    description: Name for the application
+  - name: git-url
+    type: string
+    description: url of the git repo for the code of deployment
+  - name: git-revision
+    type: string
+    description: revision to be used from repo of the code for deployment (Commit id)
+  - name: short-git-revision
+    type: string
+    description: Short commit id
+  - name: image-registry
+    type: string
+    description: Image registry
+  - name: image-repository
+    type: string
+    description: Image repository within image-registry the image will be pushed to
+  - name: deployment-git-url
+    type: string
+    description: url of the deployment git repo for the code of deployment
+    default: https://github.com/jtudelag/do500-docs-app-kustomize.git
+  - name: deployment-git-revision
+    type: string
+    description: revision to be used from deployment repo of the code for deployment (Commit id)
+    default: master
+  tasks:
+
+    - name: fetch-repository
+      taskRef:
+        name: git-clone-v0-19-0
+        kind: ClusterTask
+      workspaces:
+      - name: output
+        workspace: shared-workspace
+      params:
+      - name: url
+        value: $(params.git-url)
+      - name: deleteExisting
+        value: "true"
+      - name: revision
+        value: $(params.git-revision)
+
+    - name: build-image
+      taskRef:
+        name: buildah
+        kind: ClusterTask
+      workspaces:
+      - name: source
+        workspace: shared-workspace
+      runAfter:
+      - fetch-repository
+      params:
+      - name: TLSVERIFY
+        value: "false"
+      - name: IMAGE
+        value: $(params.image-registry)/$(params.image-repository)/$(params.application):$(params.short-git-revision)
+
+    - name: fetch-deployment-repository
+      taskRef:
+        name: git-clone-v0-19-0
+        kind: ClusterTask
+      workspaces:
+      - name: output
+        workspace: deployment-manifests
+      runAfter:
+      - build-image
+      params:
+      - name: url
+        value: $(params.deployment-git-url)
+      - name: deleteExisting
+        value: "true"
+      - name: revision
+        value: $(params.deployment-git-revision)
+
+    - name: update-tag
+      taskRef:
+        name: update-tag-kustomize
+        kind: Task
+      workspaces:
+      - name: deployment-repo
+        workspace: deployment-manifests
+      runAfter:
+      - fetch-deployment-repository
+      params:
+      - name: image
+        value: $(params.image-registry)/$(params.image-repository)/$(params.application)
+      - name: new-tag
+        value: $(params.short-git-revision)
