@@ -6,18 +6,24 @@ spec:
   workspaces:
   - name: shared-workspace
   params:
+  - name: application
+    type: string
+    description: Name for the application 
   - name: git-url
     type: string
     description: url of the git repo for the code of deployment
-    default: https://github.com/jtudelag/enablement-docs.git
   - name: git-revision
     type: string
-    description: revision to be used from repo of the code for deployment
-    default: master
-  - name: IMAGE
+    description: revision to be used from repo of the code for deployment (Commit id)
+  - name: short-git-revision
     type: string
-    description: image to be build from the code
-    default: "image-registry.openshift-image-registry.svc:5000/jtudela-pipelines/do500-docs:latest"
+    description: Short commit id
+  - name: image-registry
+    type: string
+    description: Image registry
+  - name: image-repository
+    type: string
+    description: Image repository within image-registry the image will be pushed to
   tasks:
     
     - name: fetch-repository
@@ -48,4 +54,4 @@ spec:
       - name: TLSVERIFY
         value: "false"
       - name: IMAGE
-        value: $(params.IMAGE)
+        value: $(params.image-registry)/$(params.image-repository)/$(params.application):$(params.short-git-revision)

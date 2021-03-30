@@ -12,3 +12,5 @@ https://github.com/dsanchor/quarkus-hello-world-deployment
 https://github.com/dsanchor/rh-developers-cicd
 
 https://kubectl.docs.kubernetes.io/references/kustomize/vars/
+
+https://github.com/tektoncd/triggers/blob/main/docs/eventlisteners.md#chaining-interceptors

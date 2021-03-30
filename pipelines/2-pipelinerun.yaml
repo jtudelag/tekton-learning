@@ -4,15 +4,21 @@ metadata:
   annotations:
   labels:
     tekton.dev/pipeline: create-d500-docs
-  name: create-d500-docs-run
+  name: create-d500-docs-run-new
 spec:
   params:
-  - name: IMAGE
-    value: image-registry.openshift-image-registry.svc:5000/jtudela-pipelines/do500-docs:latest
-  - name: git-revision
-    value: master
+  - name: application
+    value: do500-docs
   - name: git-url
     value: https://github.com/jtudelag/enablement-docs.git
+  - name: git-revision
+    value: master
+  - name: short-git-revision
+    value: x1234
+  - name: image-registry
+    value: image-registry.openshift-image-registry.svc.cluster.local:5000
+  - name: image-repository
+    value: jtudela-pipelines
   pipelineRef:
     name: create-d500-docs
   serviceAccountName: pipeline

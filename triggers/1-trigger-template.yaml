@@ -9,6 +9,8 @@ spec:
       description: The git revision
     - name: gitrepositoryurl
       description: The git repository url
+    - name: short-id
+      description: truncated commit id
   resourcetemplates:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
@@ -19,12 +21,18 @@ spec:
         generateName: create-d500-docs-triggered-run-
       spec:
         params:
-        - name: IMAGE
-          value: image-registry.openshift-image-registry.svc:5000/jtudela-pipelines/do500-docs:latest
-        - name: git-revision
-          value: $(tt.params.gitrevision)
+        - name: application
+          value: do500-docs
         - name: git-url
           value: $(tt.params.gitrepositoryurl)
+        - name: git-revision
+          value: $(tt.params.gitrevision)
+        - name: short-git-revision
+          value: $(tt.params.short-id)
+        - name: image-registry
+          value: image-registry.openshift-image-registry.svc.cluster.local:5000
+        - name: image-repository
+          value: jtudela-pipelines
         pipelineRef:
           name: create-d500-docs
         serviceAccountName: pipeline
