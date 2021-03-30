@@ -22,7 +22,13 @@ spec:
       image: quay.io/jtudelag/git-kustomize:1ba2053
       script: |
         #!/bin/sh
-        set -eu -o pipefail
+        set -eux -o pipefail
+
+        ls -lrt /tekton/home
+
+        ls -lrt /etc/passwd
+
+        cat /etc/passwd
 
         DEPLOYMENT_DIR="$(workspaces.deployment-repo.path)"
         cd "$DEPLOYMENT_DIR"
