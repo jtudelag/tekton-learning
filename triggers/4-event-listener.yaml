@@ -6,16 +6,4 @@ metadata:
 spec:
   serviceAccountName: pipeline
   triggers:
-    - name: github-listener
-      interceptors:
-        #- github: # Secret validation is not working https://github.com/tektoncd/triggers/issues/961
-        #    secretRef:
-        #      secretName: github-push-event
-        #      secretKey: secretToken
-        #    eventTypes:
-        #    - push
-        - cel:
-            overlays:
-            - key: short_sha
-              expression: "body.head_commit.id.truncate(7)"
-      triggerRef: github-docs-t
+    - triggerRef: github-docs-t

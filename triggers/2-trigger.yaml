@@ -3,6 +3,18 @@ kind: Trigger
 metadata:
   name: github-docs-t
 spec:
+  #serviceAccountName: pipeline
+  interceptors:
+    - github:
+        secretRef:
+          secretName: github-trigger-secret
+          secretKey: secretToken
+        eventTypes:
+        - push
+    - cel:
+        overlays:
+        - key: short_sha
+          expression: "body.head_commit.id.truncate(7)"
   bindings:
   - ref: github-docs-tb
   template:
