@@ -16,6 +16,8 @@ https://kubectl.docs.kubernetes.io/references/kustomize/vars/
 https://github.com/tektoncd/triggers/blob/main/docs/eventlisteners.md#chaining-interceptors
 
 
+https://github.com/tektoncd/triggers/tree/release-v0.10.x/examples
+
 ```  bash
 cat ~/.ssh/config
 

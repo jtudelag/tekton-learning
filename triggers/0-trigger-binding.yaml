@@ -10,4 +10,4 @@ spec:
     - name: gitrepositoryurl
       value: "https://github.com/$(body.repository.full_name)"
     - name: short-id
-      value: $(body.head_commit.id)
+      value: $(extensions.short_sha)
