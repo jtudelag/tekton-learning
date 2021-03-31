@@ -1,0 +1,36 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: debug-git-ssh
+spec:
+  description: >-
+    Debug stuff.
+  steps:
+
+    - name: debug
+      image: quay.io/jtudelag/git-kustomize:1ba2053
+      script: |
+        #!/bin/sh
+        set -eux -o pipefail
+
+        env
+
+        ls -lrta /tekton/home
+
+        ls -lrta ~/
+
+        ls -lrta ~/.ssh/
+
+        ls -lrta ~/.ssh/config
+
+        cat ~/.ssh/config
+
+        ls -lrt /etc/passwd
+
+        ls -lrt /tekton/creds/.ssh/
+
+        ls -lrt /tekton/creds/.ssh/id_github-deployment-push-secret
+
+        cat /tekton/creds/.ssh/id_github-deployment-push-secret
+
+        cat /etc/passwd

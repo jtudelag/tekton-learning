@@ -24,9 +24,20 @@ spec:
         #!/bin/sh
         set -eux -o pipefail
 
-        ls -lrt /tekton/home
+        env
+
+        ls -lrta /tekton/home
+
+        ls -lrta ~/
+
+        ls -lrta ~/.ssh/
+
+        ls -lrta ~/.ssh/config
+
+        cat ~/.ssh/config
 
         ls -lrt /etc/passwd
+
 
         cat /etc/passwd
 

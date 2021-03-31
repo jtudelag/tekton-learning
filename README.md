@@ -18,11 +18,12 @@ https://github.com/tektoncd/triggers/blob/main/docs/eventlisteners.md#chaining-i
 
 https://github.com/tektoncd/triggers/tree/release-v0.10.x/examples
 
-```  bash
-cat ~/.ssh/config
-
-HostName github.com
- IdentityFile /root/.ssh/mykey
+# Auth
 
 
-``` 
+## Multiple SSH-Keys, same Git provider
+https://github.com/tektoncd/pipeline/issues/2407
+
+https://github.com/tektoncd/pipeline/blob/main/docs/auth.md#configuring-ssh-auth-authentication-for-git
+
+https://tekton.dev/docs/pipelines/auth/

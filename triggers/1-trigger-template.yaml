@@ -34,7 +34,7 @@ spec:
         - name: image-repository
           value: jtudela-pipelines
         - name: deployment-git-url
-          value: https://github.com/jtudelag/do500-docs-app-kustomize.git
+          value: git@github.com:jtudelag/do500-docs-app-kustomize.git
         - name: deployment-git-revision
           value: master
         pipelineRef:
